@@ -29,20 +29,42 @@
 		914B3C4E2CE2A56C00BB77AA /* letsbudget.itUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = letsbudget.itUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		91D823382CE2A9C000ECC644 /* Exceptions for "letsbudget.it-main" folder in "letsbudget.it" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				letsbudget.itTests/letsbudget_itTests.swift,
+				letsbudget.itUITests/letsbudget_itUITests.swift,
+				letsbudget.itUITests/letsbudget_itUITestsLaunchTests.swift,
+			);
+			target = 914B3C312CE2A56A00BB77AA /* letsbudget.it */;
+		};
+		91D823392CE2A9C000ECC644 /* Exceptions for "letsbudget.it-main" folder in "letsbudget.itTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				letsbudget.itTests/letsbudget_itTests.swift,
+			);
+			target = 914B3C432CE2A56C00BB77AA /* letsbudget.itTests */;
+		};
+		91D8233A2CE2A9C000ECC644 /* Exceptions for "letsbudget.it-main" folder in "letsbudget.itUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				letsbudget.itUITests/letsbudget_itUITests.swift,
+				letsbudget.itUITests/letsbudget_itUITestsLaunchTests.swift,
+			);
+			target = 914B3C4D2CE2A56C00BB77AA /* letsbudget.itUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		914B3C342CE2A56A00BB77AA /* letsbudget.it */ = {
+		91D823212CE2A9B000ECC644 /* letsbudget.it-main */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = letsbudget.it;
-			sourceTree = "<group>";
-		};
-		914B3C472CE2A56C00BB77AA /* letsbudget.itTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = letsbudget.itTests;
-			sourceTree = "<group>";
-		};
-		914B3C512CE2A56C00BB77AA /* letsbudget.itUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = letsbudget.itUITests;
+			exceptions = (
+				91D823382CE2A9C000ECC644 /* Exceptions for "letsbudget.it-main" folder in "letsbudget.it" target */,
+				91D823392CE2A9C000ECC644 /* Exceptions for "letsbudget.it-main" folder in "letsbudget.itTests" target */,
+				91D8233A2CE2A9C000ECC644 /* Exceptions for "letsbudget.it-main" folder in "letsbudget.itUITests" target */,
+			);
+			path = "letsbudget.it-main";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,9 +97,7 @@
 		914B3C292CE2A56A00BB77AA = {
 			isa = PBXGroup;
 			children = (
-				914B3C342CE2A56A00BB77AA /* letsbudget.it */,
-				914B3C472CE2A56C00BB77AA /* letsbudget.itTests */,
-				914B3C512CE2A56C00BB77AA /* letsbudget.itUITests */,
+				91D823212CE2A9B000ECC644 /* letsbudget.it-main */,
 				914B3C332CE2A56A00BB77AA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -108,7 +128,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				914B3C342CE2A56A00BB77AA /* letsbudget.it */,
+				91D823212CE2A9B000ECC644 /* letsbudget.it-main */,
 			);
 			name = letsbudget.it;
 			packageProductDependencies = (
@@ -130,9 +150,6 @@
 			dependencies = (
 				914B3C462CE2A56C00BB77AA /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				914B3C472CE2A56C00BB77AA /* letsbudget.itTests */,
-			);
 			name = letsbudget.itTests;
 			packageProductDependencies = (
 			);
@@ -152,9 +169,6 @@
 			);
 			dependencies = (
 				914B3C502CE2A56C00BB77AA /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				914B3C512CE2A56C00BB77AA /* letsbudget.itUITests */,
 			);
 			name = letsbudget.itUITests;
 			packageProductDependencies = (
