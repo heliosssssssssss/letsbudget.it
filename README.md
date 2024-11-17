@@ -11,3 +11,5 @@
 - [@Adam Bell](https://www.github.com/heliosssssssssss)
 )
 
+notes:
+we are migrating to now xcodeprj n will work from there.
