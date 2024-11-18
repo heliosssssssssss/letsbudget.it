@@ -7,7 +7,7 @@ struct LaunchScreenView: View {
     var body: some View {
         ZStack {
             if isActive {
-                OnboardingStageView()
+                IntroView()
             } else {
                 LoadingView(progress: $progress)
                     .onAppear {

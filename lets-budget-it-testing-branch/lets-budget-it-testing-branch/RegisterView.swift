@@ -1,22 +1,15 @@
-//
-//  OnboardingStageView.swift
-//  lets-budget-it-testing-branch
-//
-//  Created by user267420 on 11/17/24.
-//
-
 import SwiftUI
-import UserNotifications
-import Contacts
 import AuthenticationServices
 
-struct OnboardingStageView: View {
-    @State private var loginEmail: String = ""
-    @State private var loginPassword: String = ""
+
+struct RegisterView: View {
+    @State private var email: String = ""
+    @State private var password: String = ""
+    @State private var confirmPassword: String = ""
+    @State private var phoneNumber: String = ""
     @State private var errorMessage: String?
-    @State private var navigateToNext: Bool = false
-    @State private var isLoading: Bool = false
-    @State private var navigateToRegister: Bool = false
+    @State private var isRegistering: Bool = false
+    @State private var navigateToOnboarding: Bool = false // Tracks navigation to OnboardingStage2
 
     var body: some View {
         NavigationStack {
@@ -24,18 +17,15 @@ struct OnboardingStageView: View {
                 Color.white
                     .ignoresSafeArea()
 
-                VStack(spacing: 24) {
-                    Spacer()
-
+                VStack(spacing: 20) {
                     // Title
-                    Text("Login")
+                    Text("Register")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(.black)
-                        .padding(.bottom, 10)
 
                     // Email Input
-                    TextField("Email", text: $loginEmail)
+                    TextField("Email", text: $email)
                         .padding()
                         .background(Color.gray.opacity(0.1))
                         .cornerRadius(10)
@@ -48,7 +38,7 @@ struct OnboardingStageView: View {
                         .padding(.horizontal, 32)
 
                     // Password Input
-                    SecureField("Password", text: $loginPassword)
+                    SecureField("Password", text: $password)
                         .padding()
                         .background(Color.gray.opacity(0.1))
                         .cornerRadius(10)
@@ -56,6 +46,29 @@ struct OnboardingStageView: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
                         )
+                        .padding(.horizontal, 32)
+
+                    // Confirm Password Input
+                    SecureField("Confirm Password", text: $confirmPassword)
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                        )
+                        .padding(.horizontal, 32)
+
+                    // Phone Number Input
+                    TextField("Phone Number", text: $phoneNumber)
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                        )
+                        .keyboardType(.phonePad)
                         .padding(.horizontal, 32)
 
                     // Error Message
@@ -67,43 +80,28 @@ struct OnboardingStageView: View {
                             .padding(.horizontal, 32)
                     }
 
-                    // Login Button
-                    Button(action: {
-                        handleLogin()
-                    }) {
-                        Text("Login")
+                    // Loading Indicator
+                    if isRegistering {
+                        ProgressView("Registering...")
+                            .padding()
+                    }
+
+                    // Register Button
+                    Button(action: handleRegistration) {
+                        Text("Register")
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.blue)
                             .cornerRadius(10)
-                            .shadow(radius: 5)
                     }
                     .padding(.horizontal, 32)
-
-                    // Register Button
-                    Button(action: {
-                        navigateToRegister = true
-                    }) {
-                        Text("Register")
-                            .font(.headline)
-                            .foregroundColor(.blue)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue.opacity(0.1))
-                            .cornerRadius(10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.blue, lineWidth: 1)
-                            )
-                    }
-                    .padding(.horizontal, 32)
-
+                    .padding(.top, 10)
 
                     // Sign in with Apple Button
                     SignInWithAppleButton(
-                        .signIn,
+                        .signUp,
                         onRequest: { request in
                             request.requestedScopes = [.email, .fullName]
                         },
@@ -111,9 +109,9 @@ struct OnboardingStageView: View {
                             switch result {
                             case .success(let authorization):
                                 print("Successfully signed in with Apple: \(authorization)")
-                                navigateToNext = true
+                                navigateToOnboarding = true
                             case .failure(let error):
-                                errorMessage = "Apple Sign-In failed: \(error.localizedDescription)"
+                                errorMessage = "Apple Sign-Up failed: \(error.localizedDescription)"
                             }
                         }
                     )
@@ -121,45 +119,61 @@ struct OnboardingStageView: View {
                     .frame(height: 50)
                     .cornerRadius(10)
                     .padding(.horizontal, 32)
-                    .padding(.top, 10)
 
                     Spacer()
 
-                    // Footer Text
-                    Text("This is a PTB - Private Testing Branch of: letsbudget.it - OAuth keys are validated for testing only - active Xcode build @ 0.1.017 - LoginView is set to input mode.")
+                    // PTB Footer Text
+                    Text("This is a PTB - Private Testing Branch of: letsbudget.it - OAuth keys are validated for testing only - active Xcode build @ 0.1.017 - RegisterView is set to input mode.")
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 16)
                         .padding(.bottom, 10)
                 }
+                .padding(.top, 50)
             }
-            .navigationDestination(isPresented: $navigateToRegister) {
-                RegisterView()
+            // Navigation Destination
+            .navigationDestination(isPresented: $navigateToOnboarding) {
+                OnboardingStage2View() // Replace with your actual OnboardingStage2 implementation
             }
         }
     }
 
-    private func handleLogin() {
+    private func handleRegistration() {
+        // Clear any existing error messages
         errorMessage = nil
-        isLoading = true // Start loading
+        isRegistering = true
 
-        if !isValidEmail(loginEmail) {
+        // Input validations
+        guard isValidEmail(email) else {
             errorMessage = "Please enter a valid email address."
-            isLoading = false
+            isRegistering = false
             return
         }
 
-        if loginPassword.count < 6 {
+        guard password.count >= 6 else {
             errorMessage = "Password must be at least 6 characters long."
-            isLoading = false
+            isRegistering = false
             return
         }
 
-        // Simulate delay for login
+        guard password == confirmPassword else {
+            errorMessage = "Passwords do not match."
+            isRegistering = false
+            return
+        }
+
+        guard !phoneNumber.isEmpty else {
+            errorMessage = "Please enter your phone number."
+            isRegistering = false
+            return
+        }
+
+        // Simulate registration process
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            isLoading = false // Stop loading
-            navigateToNext = true // Navigate to next view
+            isRegistering = false
+            navigateToOnboarding = true // Navigate to OnboardingStage2
+            print("User registered with email: \(email), phone: \(phoneNumber)")
         }
     }
 
@@ -170,9 +184,8 @@ struct OnboardingStageView: View {
     }
 }
 
-
-struct OnboardingStageView_Previews: PreviewProvider {
+struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
-        OnboardingStageView()
+        RegisterView()
     }
 }
